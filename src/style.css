@@ -1,3 +1,87 @@
+:root {
+  --background-color: #e0f7fa;
+  --background-color-fallback: #f3e5f5;
+  --font-color: #00796b;
+}
+
 body {
-    background-color: rgb(94, 120, 94);
+  background-color: var(--background-color, --background-color-fallback);
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  padding: 7px;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 2px solid var(--font-color);
+  color: #0d0e0d;
+  background-color: var(--font-color);
+  transition: 0.5s;
+}
+
+button:hover {
+  transform: scale(0.95);
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(1);
+  color: #000000;
+  background-color: #307e73;
+}
+
+#content {
+  width: 80vw;
+  height: 95vh;
+  border: 3px solid #b6e0e6;
+  border-radius: 5px;
+  margin: 10px auto 10px;
+}
+
+.toDoHeader {
+  color: var(--font-color, #2e7d32);
+  font-size: 30px;
+  text-decoration: underline;
+}
+
+.projects {
+  /* margin-left: -30px; */
+}
+
+.projects li {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  margin: 10px 5px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 3px solid var(--font-color);
+  width: 80%;
+}
+
+.projects li a {
+  font-size: 25px;
+  text-decoration: none;
+  font-weight: bolder;
+  color: #27b4a4;
+}
+
+.projects li a:hover {
+  color: #4ac9ba;
+}
+
+.projects li a:active {
+  color: #2b9e91;
+}
+
+.sectionOne {
+  margin-top: -10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.sectionTwo {
+  /* margin: 0 auto; */
 }
