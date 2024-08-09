@@ -11,8 +11,8 @@ body {
 }
 
 button {
-  padding: 7px;
-  font-size: 18px;
+  padding: 5px;
+  font-size: 15px;
   border-radius: 5px;
   border: 2px solid var(--font-color);
   color: #0d0e0d;
@@ -32,8 +32,8 @@ button:active {
 }
 
 #content {
-  width: 80vw;
-  height: 95vh;
+  width: 90vw;
+  height: 100vh;
   border: 3px solid #b6e0e6;
   border-radius: 5px;
   margin: 10px auto 10px;
@@ -45,23 +45,20 @@ button:active {
   text-decoration: underline;
 }
 
-.projects {
-  /* margin-left: -30px; */
-}
 
 .projects li {
   display: flex;
   justify-content: space-between;
   list-style-type: none;
-  margin: 10px 5px;
-  padding: 8px;
+  margin: 10px 0;
+  padding: 5px;
   border-radius: 5px;
   border: 3px solid var(--font-color);
-  width: 80%;
+  width: 90%;
 }
 
 .projects li a {
-  font-size: 25px;
+  font-size: 18px;
   text-decoration: none;
   font-weight: bolder;
   color: #27b4a4;
@@ -76,12 +73,23 @@ button:active {
 }
 
 .sectionOne {
-  margin-top: -10px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 10%;
 }
 
 .sectionTwo {
-  /* margin: 0 auto; */
+  display: flex;
+  justify-content: space-between;
+  height: 90%;
+  margin-right: 8px;
+}
+
+.tasksBoard {
+  width: 80%;
+  height: inherit;
+  border: 5px solid #9ce0d8;
+  border-radius: 8px;
+  margin-left: 3px;
 }
