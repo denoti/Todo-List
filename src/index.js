@@ -3,6 +3,7 @@ import toDoHeader from './ToDoHeader/toDoHeader';
 
 import createProjectsList from './Projects/projects';
 import createTasksBoard from './TasksBoard/tasksBoard';
+import modals from './Modals/modals';
 
 const listOfProjects = [
   { 'Critical Tasks': ['Task 1', 'Task 2', 'Task 3'] },
@@ -60,6 +61,9 @@ projectBtn.onclick = () => {
   console.log(listOfProjects);
   projectsList.appendChild(projectItem);
 };
+
+console.log( modals.projectModal() );
+console.log(modals.taskModal());
 
 mainBody.append(sectionOne);
 mainBody.append(sectionTwo);

@@ -45,7 +45,6 @@ button:active {
   text-decoration: underline;
 }
 
-
 .projects li {
   display: flex;
   justify-content: space-between;
@@ -92,4 +91,21 @@ button:active {
   border: 5px solid #9ce0d8;
   border-radius: 8px;
   margin-left: 3px;
+}
+
+/* Projects Modal for Display */
+.projectModal {
+  border-radius: 8px;
+}
+
+.projectModal input {
+  margin-right: 10px;
+}
+
+/* Tasks Modal for Display */
+.taskModal {
+  border-radius: 8px;
+}
+.taskModal input {
+  margin-right: 10px;
 }
