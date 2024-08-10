@@ -1,4 +1,8 @@
 import './style.css';
+import createTaskInput from './TaskInput/taskInput';
+import modals from './Modals/modals';
+let projectModal = modals.projectModal();
+let taskModal = modals.taskModal();
 
 // New Project Button
 function newProjectBtn() {
@@ -21,14 +25,16 @@ function newTaskBtn() {
 
 const mainBody = document.querySelector('#content');
 
-import modals from './Modals/modals';
-let projectModal = modals.projectModal();
-let taskModal = modals.taskModal();
-
 let taskBtn = newTaskBtn();
 let projectBtn = newProjectBtn();
 
-mainBody.append(projectModal, taskModal, projectBtn, taskBtn);
+mainBody.append(
+  projectModal,
+  taskModal,
+  projectBtn,
+  taskBtn,
+  createTaskInput('Hello'),
+);
 
 // PROJECT BUTTON EVENT LISTENER FOR OPENING MODAL TO KEY IN PROJECT
 projectBtn.addEventListener('click', () => {

@@ -10,7 +10,6 @@ function createProjectsList(listOfProjects, taskBtn) {
     linkProject.href = '#';
     linkProject.textContent = projectTask;
     projectItem.append(linkProject, taskBtn());
-    console.log(listOfProjects);
     projectsList.appendChild(projectItem);
   });
 
