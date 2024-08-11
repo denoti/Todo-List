@@ -132,6 +132,10 @@ button:active {
   width: 90%;
 }
 
+.taskInput p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 form {
   display: flex;
   flex-direction: column;

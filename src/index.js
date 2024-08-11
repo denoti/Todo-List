@@ -15,9 +15,21 @@ const sectionOne = document.createElement('section');
 const sectionTwo = document.createElement('section');
 
 const listOfProjects = [
-  { 'Critical Tasks': ['Task 1', 'Task 2', 'Task 3'] },
-  { 'General Tasks': ['Task 4', 'Task 5', 'Task 6'] },
-  { Completed: ['Task 7', 'Task 8', 'Task 9'] },
+  {
+    'Critical Tasks': [
+      { 'Task 1': false },
+      { 'Task 2': false },
+      { 'Task 3': true },
+    ],
+  },
+  {
+    'General Tasks': [
+      { 'Task 4': true },
+      { 'Task 5': false },
+      { 'Task 6': true },
+    ],
+  },
+  { Completed: [{ 'Task 7': true }, { 'Task 8': false }, { 'Task 9': true }] },
 ];
 
 // New Project Button
@@ -121,6 +133,7 @@ document.querySelectorAll('a').forEach((link, index) => {
         tasksBoard.append(createTaskInput(task));
       });
     }
+    checkboxValidation(text, index);
   });
 });
 
@@ -128,7 +141,7 @@ document.querySelectorAll('.taskBtn').forEach((btn, index) => {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     taskModal.showModal();
-    currentProjectText = btn.previousSibling.textContent;
+    currentProjectText = btn.previousElementSibling.textContent;
     currrentProjectIndex = index;
   });
 });
@@ -148,3 +161,28 @@ exitButtons.forEach((btn) => {
     }
   });
 });
+
+// CHECKBOX VALIDATION
+function isChecked(par) {
+  if (par.checked) {
+    par.nextElementSibling.style.textDecorationLine = 'line-through';
+  }
+  if (!par.checked) {
+    par.nextElementSibling.style.textDecorationLine = 'none';
+  }
+}
+
+function checkboxValidation(key, idx) {
+  let checkbox = document.querySelectorAll('input[type="checkbox"]');
+  checkbox.forEach((box, index) => {
+    isChecked(box);
+
+    box.addEventListener('change', (e) => {
+      isChecked(box);
+      let tasksArray = listOfProjects[idx][key]; // SPECIFIC ARRAY TO BE ALTERED
+      let taskKey = Object.keys(tasksArray[index])[0]; // KEY FOR ACCESSING VALUE IN OBJECT
+
+      tasksArray[index][taskKey] = e.target.checked; // SET CHECKBOX TO TRUE OR FALSE
+    });
+  });
+}

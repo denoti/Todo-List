@@ -6,8 +6,9 @@ function createTaskInput(task) {
   const deleteButton = document.createElement('i');
 
   checkBox.setAttribute('type', 'checkbox');
+  checkBox.checked = Object.values(task)[0];
 
-  text.textContent = task;
+  text.textContent = Object.keys(task)[0];
 
   deleteButton.classList.add('fas');
   deleteButton.classList.add('fa-trash-alt');
