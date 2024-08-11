@@ -14,6 +14,13 @@ const mainBody = document.querySelector('#content');
 const sectionOne = document.createElement('section');
 const sectionTwo = document.createElement('section');
 
+function stylingLinks() {
+  let links = document.querySelectorAll('a');
+  links.forEach((ln) => {
+    ln.style.color = '#27b4a4';
+  });
+}
+
 const listOfProjects = [
   {
     'Critical Tasks': [
@@ -75,27 +82,32 @@ const projectButton = document.querySelector('.projectBtn');
 formProject.addEventListener('submit', (e) => {
   const realProject = formProject.children[1].value.trim();
   if (realProject) {
-    const newProject = { [realProject]: [] };
-    listOfProjects.push(newProject);
-    let itemArray = Object.values(newProject)[0];
-    let itemLength = Object.values(newProject)[0].length;
-    if (itemLength > 0) {
-      itemArray.forEach((item) => {
-        tasksBoard.append(createTaskInput(item));
-      });
+    const projectExists = listOfProjects.some(
+      (project) => Object.keys(project)[0] === realProject,
+    );
+    if (!projectExists) {
+      const newProject = { [realProject]: [] };
+      listOfProjects.push(newProject);
+      tasksBoard.innerHTML = '';
+
+      // Create a new list item in the DOM for the new project
+      stylingLinks();
+      const projectsList = document.querySelector('.projects');
+      const projectItem = document.createElement('li');
+      const linkProject = document.createElement('a');
+      linkProject.href = '#';
+      linkProject.style.color = 'purple';
+      linkProject.textContent = realProject;
+      projectItem.append(linkProject, newTaskBtn().cloneNode(true));
+      projectsList.appendChild(projectItem);
+    } else {
+      alert('Project already exists!');
     }
   }
 
-  // Create a new list item in the DOM for the new project
-  const projectsList = document.querySelector('.projects');
-  const projectItem = document.createElement('li');
-  const linkProject = document.createElement('a');
-  linkProject.href = '#';
-  linkProject.textContent = realProject;
-  projectItem.append(linkProject, newTaskBtn().cloneNode(true));
-  projectsList.appendChild(projectItem);
-
   projectModal.children[0].children[1].value = '';
+  callTaskBtn();
+  callProjectLinks();
 });
 
 // FORM TASK EVENT LISTENER
@@ -106,10 +118,16 @@ let currrentProjectIndex;
 formTask.addEventListener('submit', (e) => {
   const realTaskOne = formTask.children[1].value.trim();
   const realTaskTwo = formTask.children[2].value.trim();
+
+  const finalDate = new Date(realTaskTwo);
+  let dateString = finalDate.toDateString().split(' ').slice(0, 3).join(' ');
+
   let listOfCurrentProjects =
     listOfProjects[currrentProjectIndex][currentProjectText];
   if (realTaskOne && realTaskTwo) {
-    listOfCurrentProjects.push(`${realTaskOne} ON ${realTaskTwo}`);
+    let taskHolder = {};
+    taskHolder[`${realTaskOne} by ${dateString}`] = false;
+    listOfCurrentProjects.push(taskHolder);
   }
   if (listOfCurrentProjects.length > 0) {
     tasksBoard.innerHTML = '';
@@ -117,34 +135,67 @@ formTask.addEventListener('submit', (e) => {
       tasksBoard.append(createTaskInput(item));
     });
   }
+
   formTask.children[1].value = '';
   formTask.children[2].value = '';
+  checkboxValidation(currentProjectText, currrentProjectIndex);
+  deleteFunction();
+  editBtns();
 });
+
+// FIRST INITIALISATION
+function init() {
+  let firstProject = document.querySelector('a').textContent;
+  listOfProjects[0][firstProject].forEach((task) => {
+    tasksBoard.append(createTaskInput(task));
+  });
+  checkboxValidation(firstProject, 0);
+  document.querySelector('a').style.color = 'purple';
+}
+
+init();
 
 // PROJECT AND TASK BUTTONS
-
-document.querySelectorAll('a').forEach((link, index) => {
-  link.addEventListener('click', (e) => {
-    tasksBoard.innerHTML = '';
-    let text = e.target.textContent;
-    let tasks = listOfProjects[index][`${text}`];
-    if (tasks.length > 0) {
-      tasks.forEach((task) => {
-        tasksBoard.append(createTaskInput(task));
+function callProjectLinks() {
+  let links = document.querySelectorAll('a');
+  links.forEach((link, index) => {
+    link.addEventListener('click', (e) => {
+      tasksBoard.innerHTML = '';
+      let text = e.target.textContent;
+      links.forEach((ln) => {
+        ln.style.color = '#27b4a4';
       });
-    }
-    checkboxValidation(text, index);
+      e.target.style.color = 'purple';
+      let tasks = listOfProjects[index][`${text}`];
+      if (tasks.length > 0) {
+        tasks.forEach((task) => {
+          tasksBoard.append(createTaskInput(task));
+        });
+      }
+      deleteFunction();
+      editBtns();
+      checkboxValidation(text, index);
+    });
   });
-});
+}
 
-document.querySelectorAll('.taskBtn').forEach((btn, index) => {
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    taskModal.showModal();
-    currentProjectText = btn.previousElementSibling.textContent;
-    currrentProjectIndex = index;
+// e.target.parentElement.style.color = '#27b4a4';
+callProjectLinks();
+
+function callTaskBtn() {
+  document.querySelectorAll('.taskBtn').forEach((btn, index) => {
+    btn.addEventListener('click', (e) => {
+      stylingLinks();
+      e.stopPropagation();
+      taskModal.showModal();
+      currentProjectText = btn.previousElementSibling.textContent;
+      btn.previousElementSibling.style.color = 'purple';
+      currrentProjectIndex = index;
+    });
   });
-});
+}
+
+callTaskBtn();
 
 projectButton.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -166,9 +217,11 @@ exitButtons.forEach((btn) => {
 function isChecked(par) {
   if (par.checked) {
     par.nextElementSibling.style.textDecorationLine = 'line-through';
+    par.nextElementSibling.nextElementSibling.disabled = true;
   }
   if (!par.checked) {
     par.nextElementSibling.style.textDecorationLine = 'none';
+    par.nextElementSibling.nextElementSibling.disabled = false;
   }
 }
 
@@ -186,3 +239,88 @@ function checkboxValidation(key, idx) {
     });
   });
 }
+
+// DELETE BUTTON FUNCTIONALITY
+function getTaskProject(taskName, arr) {
+  return arr.find((obj) => {
+    return (
+      Object.keys(obj).find((category) => {
+        return obj[category].some((task) => taskName in task);
+      }) || null
+    );
+  });
+}
+
+function deleteFunction() {
+  const delBtn = document.querySelectorAll('button.delete');
+  delBtn.forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+      let taskDetail =
+        btn.previousElementSibling.previousElementSibling.textContent.trim();
+      let answer = getTaskProject(taskDetail, listOfProjects);
+      let projectDel = Object.keys(answer)[0];
+      let projectIndex = listOfProjects.indexOf(answer);
+      let taskToBeDeletedFrom = listOfProjects[projectIndex][projectDel];
+      let updateArray = taskToBeDeletedFrom.filter(
+        (obj) => Object.keys(obj)[0] !== taskDetail,
+      );
+      checkboxValidation(projectDel, projectIndex);
+
+      listOfProjects[projectIndex][projectDel] = updateArray;
+      repaintDomAfterDeletion(listOfProjects, projectDel, projectIndex);
+    });
+  });
+}
+
+function repaintDomAfterDeletion(arr, text, indexOfProject) {
+  tasksBoard.innerHTML = '';
+  let newArray = arr[indexOfProject][text];
+  newArray.forEach((arrObj) => {
+    tasksBoard.append(createTaskInput(arrObj));
+  });
+  checkboxValidation(text, indexOfProject);
+  deleteFunction();
+  editBtns();
+}
+
+deleteFunction();
+
+function editBtns() {
+  let editButtons = document.querySelectorAll('button.edit');
+  editButtons.forEach((btn, index) => {
+    if (btn.previousElementSibling.previousElementSibling.checked) {
+      btn.disabled = true;
+    }
+
+    btn.addEventListener('click', () => {
+      let taskDetail = btn.previousElementSibling.textContent.trim();
+      let taskElement = btn.previousElementSibling;
+      let answer = getTaskProject(taskDetail, listOfProjects);
+      let projectDel = Object.keys(answer)[0];
+      let projectIndex = listOfProjects.indexOf(answer);
+      let taskToBeEdited = listOfProjects[projectIndex][projectDel][index];
+      taskElement.previousElementSibling.disabled = true;
+      btn.style.opacity = '0';
+      taskElement.setAttribute('contenteditable', true);
+      taskElement.focus();
+
+      taskElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.keyCode === 14) {
+          console.log(taskElement.textContent);
+
+          taskElement.blur();
+          btn.style.opacity = '1';
+          taskElement.setAttribute('contenteditable', false);
+          taskElement.previousElementSibling.disabled = false;
+          if (taskElement.textContent === taskDetail) {
+            return;
+          }
+          taskToBeEdited[taskElement.textContent] = taskToBeEdited[taskDetail];
+          delete taskToBeEdited[taskDetail];
+        }
+      });
+    });
+  });
+}
+
+editBtns();

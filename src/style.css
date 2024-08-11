@@ -116,7 +116,6 @@ button:active {
 /* Tasks Modal for Display */
 .taskModal {
   border-radius: 8px;
-  
 }
 .taskModal input {
   margin-right: 10px;
@@ -169,8 +168,7 @@ form {
   transform: scale(1);
 }
 
-
-.exit{
+.exit {
   font-size: 20px;
   cursor: pointer;
   transition: 0.5s;
@@ -187,4 +185,18 @@ form {
   background-color: red;
   border: none;
   padding: 8px;
+}
+
+.edit,
+.delete {
+  background: none;
+}
+
+*[disabled], [disabled] .fa-pencil-alt{
+  background-color: #f0f0f0;
+  color: #888;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
 }

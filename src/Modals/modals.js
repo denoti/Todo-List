@@ -46,6 +46,8 @@ function taskModal(prevSibling) {
   const calendar = document.createElement('input');
   calendar.setAttribute('required', true);
   calendar.setAttribute('type', 'date');
+  const today = new Date().toISOString().split('T')[0]; // GET TODAYS DATE
+  calendar.setAttribute('min', today); // SET TODAYS DATE AS MINIMUM FOR ACCOMPLISHING TASK
 
   form.append(button, input, calendar, submitBtn);
   taskMdl.append(form);
